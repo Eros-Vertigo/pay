@@ -1,0 +1,29 @@
+{
+    "name": "yuantong/pay",
+    "description": "payments",
+    "minimum-stability": "stable",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "yuantong",
+            "email": "yuantong@srun.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4.0",
+        "bower-asset/jquery": "^3.5.1",
+        "bower-asset/bootstrap": "^4.6.0",
+        "yiisoft/yii2": "^2.0",
+        "guzzlehttp/guzzle": "^7.5"
+    },
+    "autoload" : {
+        "psr-4": {
+            "Pay\\" : "src/"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true
+        }
+    }
+}
