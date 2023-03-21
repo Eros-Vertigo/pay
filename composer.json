@@ -14,7 +14,8 @@
         "bower-asset/jquery": "^3.5.1",
         "bower-asset/bootstrap": "^4.6.0",
         "yiisoft/yii2": "^2.0",
-        "guzzlehttp/guzzle": "^7.5"
+        "guzzlehttp/guzzle": "^7.5",
+        "mero/yii2-monolog": "^0.1.2"
     },
     "autoload" : {
         "psr-4": {
