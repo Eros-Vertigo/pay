@@ -19,6 +19,7 @@ class Yii
 /**
  * @property
  * @property MonologComponent $monolog
+ * @property PaymentFactory $payment
  */
 class Application extends \yii\web\Application
 {

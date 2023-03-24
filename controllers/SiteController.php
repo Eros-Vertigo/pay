@@ -8,20 +8,20 @@
 
 namespace app\controllers;
 
-use Pay\Gateways\Wechat;
+use Pay\Gateways\AliPay;
+use Yii;
+use yii\base\InvalidConfigException;
+use yii\di\NotInstantiableException;
 use yii\web\Controller;
 
 class SiteController extends Controller
 {
+    /**
+     */
     public function actionIndex()
     {
-        $order_num = mt_rand(1000000, 9999999);
-        echo '<pre>';
-        var_dump($order_num);
-        $model = new Wechat();
-        if (!$model->validate()) {
-            var_dump($model->errors);
-        }
-        echo '<pre>';
+        Yii::$app->payment->createPaymentScene('alipay', [
+            'class' => AliPay::class
+        ]);
     }
 }

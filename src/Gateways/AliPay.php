@@ -1,21 +1,20 @@
 <?php
+/**
+ *
+ * User: yuantong
+ * Date: 2023/3/24
+ * Email: <yuantong@srun.com>
+ */
 
 namespace Pay\Gateways;
 
 use Pay\Contracts\PaymentInterface;
-use yii\base\Model;
 
-/**
- *
- * User: yuantong
- * Date: 2023/3/21
- * Email: <yuantong@srun.com>
- */
-class Wechat extends Model implements PaymentInterface
+class AliPay implements PaymentInterface
 {
     public function createOrder()
     {
-        var_dump('createOrder');
+
     }
 
     public function pay()
@@ -56,5 +55,10 @@ class Wechat extends Model implements PaymentInterface
     public function generateSign()
     {
         // TODO: Implement generateSign() method.
+    }
+
+    public function getConfig()
+    {
+        return $this->config;
     }
 }
