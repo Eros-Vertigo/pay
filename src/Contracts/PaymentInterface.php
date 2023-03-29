@@ -9,21 +9,7 @@ namespace Pay\Contracts;
  */
 interface PaymentInterface
 {
-    public function createOrder();
+    public function createOrder($params);
 
-    public function pay();
-
-    public function refund();
-
-    public function notify();
-
-    public function queryOrder();
-
-    public function closeOrder();
-
-    public function cancelOrder();
-
-    public function verifySign();
-
-    public function generateSign();
+    public function query($out_trade_no);
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Mero\Monolog\MonologComponent;
+use Pay\Factories\PaymentFactory;
 
 /**
  *

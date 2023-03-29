@@ -8,20 +8,18 @@
 
 namespace app\controllers;
 
-use Pay\Gateways\AliPay;
-use Yii;
-use yii\base\InvalidConfigException;
-use yii\di\NotInstantiableException;
+use app\factories\PaymentFactory;
 use yii\web\Controller;
 
 class SiteController extends Controller
 {
     /**
+     * Site Index
      */
     public function actionIndex()
     {
-        Yii::$app->payment->createPaymentScene('alipay', [
-            'class' => AliPay::class
-        ]);
+        $payment = PaymentFactory::createPayment('wechat');
+        $res = $payment->query(['transaction_id' => '1008450740201411110005820873']);
+        var_dump($res);
     }
 }
