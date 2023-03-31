@@ -18,7 +18,8 @@
         "mero/yii2-monolog": "^0.1.2",
         "ext-simplexml": "*",
         "ext-http": "*",
-        "ext-libxml": "*"
+        "ext-libxml": "*",
+        "ext-openssl": "*"
     },
     "autoload" : {
         "psr-4": {

@@ -9,17 +9,26 @@
 namespace app\controllers;
 
 use app\factories\PaymentFactory;
+use GuzzleHttp\Exception\GuzzleException;
 use yii\web\Controller;
 
 class SiteController extends Controller
 {
     /**
      * Site Index
+     * @throws GuzzleException
      */
     public function actionIndex()
     {
-        $payment = PaymentFactory::createPayment('wechat');
-        $res = $payment->query(['transaction_id' => '1008450740201411110005820873']);
-        var_dump($res);
+        $payment = PaymentFactory::createPayment('alipay');
+        $result = $payment->createOrder([
+            'out_trade_no' => '20150320010101001',
+            'total_amount' => 0.01,
+            'subject' => '订单标题',
+            'product_code' => 'FAST_INSTANT_TRADE_PAY',
+        ]);
+        echo '<pre>';
+        var_dump($result);
+        echo '<pre>';exit;
     }
 }

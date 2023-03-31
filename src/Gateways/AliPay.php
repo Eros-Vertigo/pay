@@ -8,57 +8,40 @@
 
 namespace Pay\Gateways;
 
-use Pay\Contracts\PaymentInterface;
+use Pay\Contracts\Payment;
+use Pay\Processor\Encryptor;
+use Pay\Processor\Parameter;
+use yii\helpers\Json;
 
-class AliPay implements PaymentInterface
+class AliPay extends Payment
 {
-    public function createOrder()
-    {
+    const PRODUCT_CODE = 'FAST_INSTANT_TRADE_PAY';
 
+    /**
+     * @throws \Exception
+     * @throws \GuzzleHttp\Exception\GuzzleException
+     */
+    public function createOrder($params)
+    {
+        $params['product_code'] = self::PRODUCT_CODE;
+        $params = array_merge($this->config, [
+            'method' => 'alipay.trade.page.pay',
+            'sign_type' => 'RSA2',
+            'timestamp' => date('Y-m-d H:i:s'),
+            'version' => '1.0',
+            'bizcontent' => Json::encode($params)
+        ]);
+        $data = Parameter::generateSignByAlipay($params);
+        $sign = Encryptor::sign($data, $this->config['private_key']);
+        $params['sign'] = $sign;
+        $params['debug'] = true;
+
+        return $this->get(sprintf('%s?charset=utf-8', $this->api_url), $params);
     }
 
-    public function pay()
+    public function query($out_trade_no)
     {
-        // TODO: Implement pay() method.
-    }
 
-    public function refund()
-    {
-        // TODO: Implement refund() method.
-    }
-
-    public function notify()
-    {
-        // TODO: Implement notify() method.
-    }
-
-    public function queryOrder()
-    {
-        // TODO: Implement queryOrder() method.
-    }
-
-    public function closeOrder()
-    {
-        // TODO: Implement closeOrder() method.
-    }
-
-    public function cancelOrder()
-    {
-        // TODO: Implement cancelOrder() method.
-    }
-
-    public function verifySign()
-    {
-        // TODO: Implement verifySign() method.
-    }
-
-    public function generateSign()
-    {
-        // TODO: Implement generateSign() method.
-    }
-
-    public function getConfig()
-    {
-        return $this->config;
+        // TODO: Implement query() method.
     }
 }

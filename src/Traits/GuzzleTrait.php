@@ -28,4 +28,5 @@ trait GuzzleTrait
 
         return $response->getBody()->getContents();
     }
+
 }

@@ -30,6 +30,14 @@ class Parameter
         return $params;
     }
 
+    public static function generateSignByAlipay($params): string
+    {
+        unset($params['private_key']);
+        ksort($params);
+
+        return http_build_query(array_filter($params));
+    }
+
     /**
      * 数组转XML
      * @param $arr
