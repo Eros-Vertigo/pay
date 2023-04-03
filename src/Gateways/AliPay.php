@@ -8,6 +8,7 @@
 
 namespace Pay\Gateways;
 
+use GuzzleHttp\Exception\GuzzleException;
 use Pay\Contracts\Payment;
 use Pay\Processor\Encryptor;
 use Pay\Processor\Parameter;
@@ -19,13 +20,14 @@ class AliPay extends Payment
 
     /**
      * @throws \Exception
-     * @throws \GuzzleHttp\Exception\GuzzleException
+     * @throws GuzzleException
      */
     public function createOrder($params)
     {
         $params['product_code'] = self::PRODUCT_CODE;
         $params = array_merge($this->config, [
             'method' => 'alipay.trade.page.pay',
+            'charset'=> 'UTF-8',
             'sign_type' => 'RSA2',
             'timestamp' => date('Y-m-d H:i:s'),
             'version' => '1.0',
@@ -34,9 +36,12 @@ class AliPay extends Payment
         $data = Parameter::generateSignByAlipay($params);
         $sign = Encryptor::sign($data, $this->config['private_key']);
         $params['sign'] = $sign;
-        $params['debug'] = true;
+        unset($params['private_key']);
 
-        return $this->get(sprintf('%s?charset=utf-8', $this->api_url), $params);
+        return $this->post($this->api_url, [
+            'form_params' => $params,
+            'debug' => true,
+        ]);
     }
 
     public function query($out_trade_no)

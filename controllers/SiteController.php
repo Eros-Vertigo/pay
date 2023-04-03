@@ -10,6 +10,7 @@ namespace app\controllers;
 
 use app\factories\PaymentFactory;
 use GuzzleHttp\Exception\GuzzleException;
+use yii\helpers\Json;
 use yii\web\Controller;
 
 class SiteController extends Controller
@@ -27,8 +28,9 @@ class SiteController extends Controller
             'subject' => '订单标题',
             'product_code' => 'FAST_INSTANT_TRADE_PAY',
         ]);
-        echo '<pre>';
-        var_dump($result);
-        echo '<pre>';exit;
+        return $result;
+//        echo '<pre>';
+//        var_dump($result);
+//        echo '<pre>';exit;
     }
 }

@@ -29,4 +29,13 @@ trait GuzzleTrait
         return $response->getBody()->getContents();
     }
 
+    /**
+     * @throws GuzzleException
+     */
+    public function get($uri, $query)
+    {
+        $response = $this->client->get($uri, $query);
+
+        return $response->getBody()->getContents();
+    }
 }
