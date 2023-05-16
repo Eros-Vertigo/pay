@@ -19,7 +19,8 @@
         "ext-simplexml": "*",
         "ext-http": "*",
         "ext-libxml": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "ext-iconv": "*"
     },
     "autoload" : {
         "psr-4": {

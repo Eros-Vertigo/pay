@@ -10,6 +10,13 @@ namespace Pay\Processor;
  */
 class Encryptor
 {
+    /**
+     * RSA2加密
+     * @param $data
+     * @param $private_key
+     * @return string|void
+     * @author yt <yuantong@srun.com>
+     */
     public static function sign($data, $private_key)
     {
         $pem_key = "-----BEGIN PRIVATE KEY-----\n" . chunk_split($private_key, 64, "\n") . "-----END PRIVATE KEY-----";

@@ -35,7 +35,11 @@ class Parameter
         unset($params['private_key']);
         ksort($params);
 
-        return http_build_query(array_filter($params));
+        $query = '';
+        foreach ($params as $k => $v) {
+            $query .= $k . '=' . $v . '&';
+        }
+        return rtrim($query, '&');
     }
 
     /**

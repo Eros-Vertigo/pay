@@ -32,7 +32,7 @@ trait GuzzleTrait
     /**
      * @throws GuzzleException
      */
-    public function get($uri, $query)
+    public function get($uri, $query): string
     {
         $response = $this->client->get($uri, $query);
 

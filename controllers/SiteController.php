@@ -19,18 +19,15 @@ class SiteController extends Controller
      * Site Index
      * @throws GuzzleException
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $payment = PaymentFactory::createPayment('alipay');
         $result = $payment->createOrder([
             'out_trade_no' => '20150320010101001',
             'total_amount' => 0.01,
             'subject' => '订单标题',
-            'product_code' => 'FAST_INSTANT_TRADE_PAY',
         ]);
-        return $result;
-//        echo '<pre>';
-//        var_dump($result);
-//        echo '<pre>';exit;
+        $this->layout = false;
+        return $this->renderContent($result);
     }
 }

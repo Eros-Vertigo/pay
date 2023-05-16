@@ -22,26 +22,30 @@ class AliPay extends Payment
      * @throws \Exception
      * @throws GuzzleException
      */
-    public function createOrder($params)
+    public function createOrder($params): string
     {
         $params['product_code'] = self::PRODUCT_CODE;
         $params = array_merge($this->config, [
             'method' => 'alipay.trade.page.pay',
-            'charset'=> 'UTF-8',
-            'sign_type' => 'RSA2',
+            'charset'=> 'utf-8',
             'timestamp' => date('Y-m-d H:i:s'),
-            'version' => '1.0',
             'bizcontent' => Json::encode($params)
         ]);
+
         $data = Parameter::generateSignByAlipay($params);
         $sign = Encryptor::sign($data, $this->config['private_key']);
         $params['sign'] = $sign;
         unset($params['private_key']);
 
-        return $this->post($this->api_url, [
+        $body = $this->post($this->api_url, [
             'form_params' => $params,
-            'debug' => true,
+            'decode_content' => 'gzip', // 设置响应解码方式为 gzip，提高响应速度
+            'headers' => [
+                'Accept-Encoding' => 'gzip', // 告诉服务器可以返回 gzip 压缩的响应
+            ],
         ]);
+
+        return iconv('GBK', 'UTF-8//IGNORE', $body);
     }
 
     public function query($out_trade_no)
