@@ -25,7 +25,7 @@ class Parameter
 
         ksort($params);
 
-        $query = sprintf('%s&key=%s', http_build_query(array_filter($params)), $key);
+        $query = sprintf('%s&key=%s', self::arrayToString($params), $key);
         $params['sign'] = strtoupper(md5($query));
         return $params;
     }
@@ -35,6 +35,16 @@ class Parameter
         unset($params['private_key']);
         ksort($params);
 
+        return self::arrayToString($params);
+    }
+
+    /**
+     * @param $params
+     * @return string
+     * @author yt <yuantong@srun.com>
+     */
+    public static function arrayToString($params): string
+    {
         $query = '';
         foreach ($params as $k => $v) {
             $query .= $k . '=' . $v . '&';

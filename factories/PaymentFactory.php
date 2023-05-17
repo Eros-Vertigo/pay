@@ -30,12 +30,13 @@ class PaymentFactory extends Component
     public static function wechatConfig(): array
     {
         return [
-            'appid' => 'wx2421b1c4370ec43b',
-            'mch_id' => '10000100',
+            'appid' => 'wx1a238606a6d6413',
+            'mch_id' => '1625300911',
             'device_info' => 1000,
             'body' => 'test',
-            'nonce_str' => 'ec2316275641faa3aacf3cc599e8730f',
-            'key' => '192006250b4c09247ec02edce69f6a2d',
+            'nonce_str' => 'ibuaiVcKdpRxkhJA',
+            'key' => 'b92178945d3e3c35fa91075f02728dd2',
+            'notify_url' => 'https://srunxian.com:59527/pay/notify',
         ];
     }
 

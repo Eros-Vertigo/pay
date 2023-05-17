@@ -35,4 +35,13 @@ abstract class Payment implements PaymentInterface
         $this->client = new Client();
         $this->api_url = $api_url;
     }
+
+    protected function success($message, $data): array
+    {
+        return [
+            'success' => true,
+            'message' => $message,
+            'data' => $data ?? []
+        ];
+    }
 }
