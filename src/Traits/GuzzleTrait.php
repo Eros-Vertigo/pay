@@ -4,6 +4,7 @@ namespace Pay\Traits;
 
 use Exception;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\InvalidArgumentException;
 
 /**
  * Guzzle Trait
@@ -14,19 +15,49 @@ use GuzzleHttp\Exception\GuzzleException;
 trait GuzzleTrait
 {
     /**
+     * @var mixed 请求地址
+     */
+    protected $uri;
+    /**
+     * @var mixed 请求载体
+     */
+    protected $payload;
+
+    /**
+     * 请求前置操作
+     * @author yt <yuantong@srun.com>
+     */
+    public function beforeRequest()
+    {
+        if (empty($this->uri)) {
+            throw new InvalidArgumentException("Request URL must be have");
+        }
+    }
+
+    /**
+     * 响应前置操作
+     * @param $response
+     * @return mixed
+     * @author yt <yuantong@srun.com>
+     */
+    public function beforeResponse($response)
+    {
+        return $response->getBody()->getContents();
+    }
+
+    /**
      * post request
      *
-     * @param $uri
-     * @param $payload
      * @return string
      * @throws GuzzleException
      * @throws Exception
      */
-    public function post($uri, $payload): string
+    public function post(): string
     {
-        $response = $this->client->post($uri, $payload);
+        $this->beforeRequest();
+        $response = $this->client->post($this->uri, $this->payload);
 
-        return $response->getBody()->getContents();
+        return $this->beforeResponse($response);
     }
 
     /**

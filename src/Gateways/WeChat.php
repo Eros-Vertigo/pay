@@ -5,8 +5,8 @@ namespace Pay\Gateways;
 use GuzzleHttp\Exception\GuzzleException;
 use Pay\Contracts\Payment;
 use Pay\Exceptions\WechatException;
+use Pay\Gateways\models\WechatModel;
 use Pay\Processor\Parameter;
-use yii\helpers\Json;
 
 /**
  * WeChat Payment
@@ -16,31 +16,42 @@ use yii\helpers\Json;
  */
 class WeChat extends Payment
 {
-    /**
-     * @throws GuzzleException
-     */
-    private function requestApi($payload, $method)
+    public function __construct($config, $api_url)
     {
-        $params = array_merge($this->config, $payload);
+        parent::__construct($config, $api_url);
+        WechatModel::validateConfig($config);
+    }
+
+    public function beforeRequest()
+    {
+        $params = array_merge($this->config, $this->payload);
         $params = Parameter::generateSignByWechat($params);
         $xml = Parameter::arrayToXml($params);
+        $this->payload = ['body' => $xml];
+        parent::beforeRequest();
+    }
 
-        $res = $this->post(sprintf('%s/pay/%s', $this->api_url, $method), [
-            'body' => $xml,
-        ]);
-
-        $result = Parameter::xmlToArray($res);
+    /**
+     * @throws WechatException
+     */
+    public function beforeResponse($response)
+    {
+        $response = parent::beforeResponse($response);
+        $result = Parameter::xmlToArray($response);
         if ($result['return_code'] != 'SUCCESS') {
-            return new WechatException($result['return_msg']);
+            throw new WechatException($result['return_msg']);
         }
         return $result;
     }
+
     /**
      * @throws GuzzleException
      */
     public function createOrder($params)
     {
-        return $this->requestApi($params, 'unifiedorder');
+        $this->uri = sprintf('%s/pay/%s', $this->api_url, 'unifiedorder');
+        $this->payload = $params;
+        return $this->post();
     }
 
 
@@ -49,7 +60,9 @@ class WeChat extends Payment
      */
     public function query($out_trade_no)
     {
-        return $this->requestApi(compact('out_trade_no'), 'orderquery');
+        $this->uri = sprintf('%s/pay/%s', $this->api_url, 'orderquery');
+        $this->payload = compact('out_trade_no');
+        return $this->post();
     }
 
     public function parseResponse($result)

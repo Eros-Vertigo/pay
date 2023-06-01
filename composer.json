@@ -20,7 +20,8 @@
         "ext-http": "*",
         "ext-libxml": "*",
         "ext-openssl": "*",
-        "ext-iconv": "*"
+        "ext-iconv": "*",
+        "endroid/qr-code": "4.4.4"
     },
     "autoload" : {
         "psr-4": {

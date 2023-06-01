@@ -32,7 +32,6 @@ class PaymentFactory extends Component
         return [
             'appid' => 'wx1a238606a6d6413',
             'mch_id' => '1625300911',
-            'device_info' => 1000,
             'body' => 'test',
             'nonce_str' => 'ibuaiVcKdpRxkhJA',
             'key' => 'b92178945d3e3c35fa91075f02728dd2',
