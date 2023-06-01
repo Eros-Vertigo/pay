@@ -18,6 +18,28 @@ class AliPay extends Payment
 {
     const PRODUCT_CODE = 'FAST_INSTANT_TRADE_PAY';
 
+    public function beforeRequest()
+    {
+        $params = $this->payload;
+        $this->payload = array_merge($this->config, [
+            'method' => 'alipay.trade.page.pay',
+            'charset'=> 'utf-8',
+            'timestamp' => date('Y-m-d H:i:s'),
+            'bizcontent' => Json::encode($params)
+        ]);
+        $data = Parameter::generateSignByAlipay($params);
+        $sign = Encryptor::sign($data, $this->config['private_key']);
+        $params['sign'] = $sign;
+        unset($params['private_key']);
+        $this->payload = [
+            'form_params' => $params,
+            'decode_content' => 'gzip', // 设置响应解码方式为 gzip，提高响应速度
+            'headers' => [
+                'Accept-Encoding' => 'gzip', // 告诉服务器可以返回 gzip 压缩的响应
+            ],
+        ];
+    }
+
     /**
      * @throws \Exception
      * @throws GuzzleException
@@ -51,6 +73,5 @@ class AliPay extends Payment
     public function query($out_trade_no)
     {
 
-        // TODO: Implement query() method.
     }
 }

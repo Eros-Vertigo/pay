@@ -41,7 +41,7 @@ class WeChat extends Payment
         if ($result['return_code'] != 'SUCCESS') {
             throw new WechatException($result['return_msg']);
         }
-        return $result;
+        return $this->parseResponse($result);
     }
 
     /**
