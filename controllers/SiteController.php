@@ -25,13 +25,17 @@ class SiteController extends Controller
     public function actionIndex(): string
     {
         $payment = PaymentFactory::createPayment('alipay');
-        $result = $payment->createOrder([
-            'out_trade_no' => '20150320010101001',
-            'total_amount' => 0.01,
-            'subject' => '订单标题',
-        ]);
-        $this->layout = false;
-        return $this->renderContent($result);
+        try {
+            $result = $payment->createOrder([
+                'out_trade_no' => '20150320010101001',
+                'total_amount' => 0.01,
+                'subject' => '订单标题',
+            ]);
+            $this->layout = false;
+            return $this->renderContent($result);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

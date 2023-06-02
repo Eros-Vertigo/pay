@@ -52,7 +52,7 @@ trait GuzzleTrait
      * @throws GuzzleException
      * @throws Exception
      */
-    public function post(): string
+    public function post()
     {
         $this->beforeRequest();
         $response = $this->client->post($this->uri, $this->payload);

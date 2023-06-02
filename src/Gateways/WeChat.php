@@ -3,10 +3,15 @@
 namespace Pay\Gateways;
 
 use GuzzleHttp\Exception\GuzzleException;
+use http\Exception\BadMessageException;
 use Pay\Contracts\Payment;
 use Pay\Exceptions\WechatException;
 use Pay\Gateways\models\WechatModel;
 use Pay\Processor\Parameter;
+use yii\base\InvalidCallException;
+use yii\base\InvalidConfigException;
+use yii\base\InvalidValueException;
+use yii\web\BadRequestHttpException;
 
 /**
  * WeChat Payment
@@ -16,9 +21,11 @@ use Pay\Processor\Parameter;
  */
 class WeChat extends Payment
 {
-    public function __construct($config, $api_url)
+    const API_URL = 'https://api.mch.weixin.qq.com';
+    public function __construct($config)
     {
-        parent::__construct($config, $api_url);
+        parent::__construct($config);
+        $this->api_url = self::API_URL;
         WechatModel::validateConfig($config);
     }
 
@@ -32,14 +39,16 @@ class WeChat extends Payment
     }
 
     /**
-     * @throws WechatException
+     * @param $response
+     * @return mixed|InvalidConfigException
+     * @author yt <yuantong@srun.com>
      */
     public function beforeResponse($response)
     {
         $response = parent::beforeResponse($response);
         $result = Parameter::xmlToArray($response);
         if ($result['return_code'] != 'SUCCESS') {
-            throw new WechatException($result['return_msg']);
+            throw new BadRequestHttpException($result['return_msg']);
         }
         return $this->parseResponse($result);
     }
@@ -69,11 +78,11 @@ class WeChat extends Payment
     {
         if ($result['trade_type'] == 'NATIVE') {
             // 扫码
-            return $this->success('', $result['code_url']);
+            return $result['code_url'];
         }
         if ($result['trade_type'] == 'MWEB') {
-            return $this->success($result['return_code'], $result['mweb_url']);
+            return $result['mweb_url'];
         }
-        return new WechatException('错误的支付方式');
+        return new InvalidConfigException('错误的支付方式');
     }
 }

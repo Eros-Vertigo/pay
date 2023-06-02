@@ -29,19 +29,9 @@ abstract class Payment implements PaymentInterface
      */
     private Client $client;
 
-    public function __construct($config, $api_url)
+    public function __construct($config)
     {
         $this->config = $config;
         $this->client = new Client();
-        $this->api_url = $api_url;
-    }
-
-    protected function success($message, $data): array
-    {
-        return [
-            'success' => true,
-            'message' => $message,
-            'data' => $data ?? []
-        ];
     }
 }

@@ -14,23 +14,20 @@ use yii\base\Component;
  */
 class PaymentFactory extends Component
 {
-    const WECHAT_URL = 'https://api.mch.weixin.qq.com';
-    const ALIPAY_URL = 'https://openapi.alipay.com/gateway.do';
-
     public static function createPayment($type)
     {
         switch ($type) {
             case 'wechat':
-                return new WeChat(self::wechatConfig(), self::WECHAT_URL);
+                return new WeChat(self::wechatConfig());
             case 'alipay':
-                return new AliPay(self::alipayConfig(), self::ALIPAY_URL);
+                return new AliPay(self::alipayConfig());
         }
     }
 
     public static function wechatConfig(): array
     {
         return [
-            'appid' => 'wx1a238606a6d6413',
+            'appid' => 'wx1a238606a6d64130',
             'mch_id' => '1625300911',
             'body' => 'test',
             'nonce_str' => 'ibuaiVcKdpRxkhJA',
@@ -42,11 +39,12 @@ class PaymentFactory extends Component
     public static function alipayConfig(): array
     {
         return [
-            'app_id' => '2021003128646054',
+            'app_id' => '2021003197604902',
             'sign_type' => 'RSA2',
+            'charset' => 'utf-8',
             'version' => '1.0',
             'format' => 'json',
-            'private_key' => 'MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCoLgJxalPXn5szQ1MtRxzVOiAn9Qit3zndr399O7cSQUD7a1kdZiAVJouv+Afa0nHeAeG734+o5noYQGgKyMlJ6q2MHa4R+X+moTVCrGHv3aiwO4+lMU/N/foshfvlWNwPX2ApS47lAJWpbVYf6LgpZZT/S/E2rkmquCAr8GKnatN1/iIlvkJzy6r5NV9RF5OaF5aekQ+JC28H3hl+GdRm1wXA8+Q6kmRv4PMscDy2cl3ifk9WhX7QhPa28gV9UgYaFZ7cnRV/IaUw0fpTP/ppX26ZG3ZXkVlXvhoD+dOkInRhsABP58IlX4nbMcw8/Ud2L48vr//L8EWMfgJ1YYEvAgMBAAECggEASCKj7Z2bpKrS2OQRsyQDW/n4fOr+9AUBPvLdjguk9HGEu9JJgPCi5i+ITsvmIpeNO5o3BmxXpCxnRiup9KY2oDvGgIjidtc7R29x9s0VnNrIVf7WGBbUkhhTy/EUIEVC7l0MU+oSumrLxsYc4Mbi5u6pP++E4N1Uv6MGOZJ73i6iozauYHBPR+PymVrFZFMlrymNLiNpeZDpwZcDAiw19OecG2XyHBZXREw7anyXoXHepGEBPbWLRTO8QAV5oqIf5XGCkJzQ9wrHLum3EpNyBElYZn2JnfEmoWAW0fjptsiDox33dgtq/+XVy5ca1LxZurf+ySsAU4A4abvW8wI7YQKBgQDoyfiHt4/h4nYw5MsvVzcp3CpHCrU1df91iZV4vpQsV7Kwh7Wz7dPNtG1d+FwAD+3yvGwUi1+Yceyqjk3vcXS/Fk1FfZ4L7FGir+bhLj9UrxHNrLT2GX8E2rjTFZtE8is0ruNlF2W3NssYRi0n1FquENwe/1CWCUnXE4LXd5tm+QKBgQC48tzqoqZf6QFzVCI3amq/37P4NQMksFvi4ouv35FindqTFoIPIan1QgWzDMXXlGq8XQbLbPlEKmb12BUNr2ADiQZLnkciBKdDPVFC9itRWA/XBV9g0+mZE/3AuojH2p4kLiGD9g4CTf8JJbivcq25TBoRck9VqmJGYjYMT5lrZwKBgB+IA/b2ITIah6HVy8PMz3cHEF7xD1x/cCvOiAWD4vQiqNyKdU064J6TWuEInAWSIsvnQ8iAnGE8xS7Q+bN+La8YaT0JZ9f7mY8svlwv9HoXAJVYWGahS3gv3CsTWSW8m6eWLMzrn2ZysI3IK6Oieunq9LXqJVM9TNgqF2XyGIWZAoGAMO54Sk+sCvX/nz6kKtsp0Qfjeoi0AzHxrY5YfLh+o4O1/3JWCKDUcYH9NgjsEwQ+VQWbtZhoPoOlZ+e6cjtzAJxxIPKISVTH1/9SD5BHl6bf0fim6lxGkmx6l1ICvDV334Sg82PXAv8VuZrUSP7jPYIH55PBr517kLmNKSaqJYMCgYEA54TRohrM2RzLe154PNujmEkkYkgGC+ya7j1t8YLSPWeufWK4qymN3sbvIJFNh9lCdIw51ZITIK+Ic7wHqgSOKop+XPuyMeHs4R/xqaPo0JDQx9TDRWPUlLPpUxd1eQqq59EqQI0DvWoHzDbNRInF4aDr0cJAjZ6bj0rlgqfUmkU='
+            'private_key' => 'MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCOOyi/vGKwjYi37jfoGMdfFJsHyusAlodt4/5of1xUdF5ElTERzQMIgYcJy9avmdKaUbLWBu517VU1o35q2rqvxKUATgeNXfUWJBQksC33M0FLtPmhuH6dKz8CbULrAGaVg/H3WZp1o3JaY8QmxVQGVvslCgsAbMA57oa1KLw0HIhMAmjYoj3Rm/rHsDgZx1m72q53MFkHKBsKT1IinmTQZwD3d9F4cHwAahBzx4KTUfomdpzPRMw89XhRpw5/7N3/w7fGC6QHlmFJ5GmpjVB9Dy3CU1jPf3ox++nXz4lHpJVqy9HdBrLhBSyNosoOp9wcYg7paitO7w69xa5F75qNAgMBAAECggEAZ5t4p5MXYPz45uNFHnFOalicRiTu41LD/KzkmkKMg4jxUoxLXmg1GXEhaWVvUiN/YqK432fVNVpZg+VBJZ2H+JoKiBpPLg+PhT1q3v7nvPc9TWTbo469zMe/8oidAoscLzYagNBoz+DsYCPks0lzV9rsv6J9OSX/MTQsNLMjxeEc6x5ybFgvfbhC8JkhOYrp0H1Auvf8gabKlVz7MN0ydXPTolgv9rEqETfWVCvOb0Cd6+BmzAVb1Lr+38cZUfjK2scs8e9LXSI5pWV3hAIXPSxUb/k2AWEv1LL2jtUfvPY6XvgItuJBQN8IRVtuJoa2/0+eM/y73DiiyR64W89kgQKBgQDCYjfYSlrxOmpHESdtnwbQ6JFBgLz1NY74NcxC7lw1wlworo/wY66LUXgn73mSAccUZf31UTmBCpMckQi5Mjmt8v7ErQQkRRISBHRDyxXuzE5ga2pvErWNAnPki3YG0cOWdGlyGg4GZDDbEYrXfshG2UbVBhoURgexBermkeJy1QKBgQC7UOGM33jvKvCT5hZpjmYrzU6yF+L+nHM2SLTRvcpvTau7W/QzSBoHfi4Tm92zrasASEF4xeYv1mS9zgOML+UunXT3QMYiqqgNFH66jJW8mPJMiJP72TE4jJX3hJ0KVPx58pMm55zZAANZ2RQszvOm0YRiju+nXQwtxONJoYU02QKBgB+Zk/aHb+1TT7+p3D0H4zXG+QYrBYzfXhSfuksPMNJUfGLoreGoctGXNu9XEO5Zd6GrSvO8dpqxu2Sjd0WUEqhinmQetFOpHtzq+HOk6jXd5Mfr7muMIROBWJHI0jEdnKwy1ImGDs2fMAoM+gM6Sxipbchnq4msMMfobF17TdLZAoGALkMpkZtXyOn4BO8ctfE/dq38M6wGmg+VvOB0GCEhsB+kvF9XjprOIu+c/abPOKM5ypYN5YAq+8Gdm+sXoTXrCnpE+xP6W3F+k8xuCDDUgoHbxd8tfVQE/gxqtXkBOB4JRS0N/tvRNx7ztOsSOobaUmcIpTbcJZ+rdFpeMD8+IPECgYBa+CZXJMs/UwJ88F1taQLVfxWEnWVAljncS4ObBK3znJTz64QfpUKIbKva1T+v6AhXhTpCzn0e4li25kMKxZWDnQUP9R7avfYnI8MyPzXIINviVI4o7lpaKLxxENfblA0TNbno/SQJUHH7+74ZqzwBaYGmKLEL4QQKnRLoxlGMmQ=='
         ];
     }
 }
