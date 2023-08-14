@@ -3,14 +3,11 @@
 namespace Pay\Gateways;
 
 use GuzzleHttp\Exception\GuzzleException;
-use http\Exception\BadMessageException;
 use Pay\Contracts\Payment;
 use Pay\Exceptions\WechatException;
 use Pay\Gateways\models\WechatModel;
 use Pay\Processor\Parameter;
-use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
-use yii\base\InvalidValueException;
 use yii\web\BadRequestHttpException;
 
 /**
@@ -41,6 +38,7 @@ class WeChat extends Payment
     /**
      * @param $response
      * @return mixed|InvalidConfigException
+     * @throws BadRequestHttpException
      * @author yt <yuantong@srun.com>
      */
     public function beforeResponse($response)

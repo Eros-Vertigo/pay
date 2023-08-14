@@ -39,6 +39,7 @@ class AliPay extends Payment
             'timestamp' => date('Y-m-d H:i:s'),
             'bizcontent' => Json::encode($params)
         ]);
+        var_dump($params);exit;
         $data = Parameter::generateSignByAlipay($params);
         $sign = Encryptor::sign($data, $this->config['private_key']);
         $params['sign'] = $sign;

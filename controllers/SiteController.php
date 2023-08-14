@@ -27,7 +27,7 @@ class SiteController extends Controller
         $payment = PaymentFactory::createPayment('alipay');
         try {
             $result = $payment->createOrder([
-                'out_trade_no' => '20150320010101001',
+                'out_trade_no' => time().mt_rand(10000, 99999),
                 'total_amount' => 0.01,
                 'subject' => '订单标题',
             ]);
