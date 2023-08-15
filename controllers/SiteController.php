@@ -30,6 +30,7 @@ class SiteController extends Controller
                 'out_trade_no' => time().mt_rand(10000, 99999),
                 'total_amount' => 0.01,
                 'subject' => '订单标题',
+                'product_code' => 'FAST_INSTANT_TRADE_PAY',
             ]);
             $this->layout = false;
             return $this->renderContent($result);

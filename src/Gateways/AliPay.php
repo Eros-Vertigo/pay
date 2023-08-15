@@ -37,20 +37,23 @@ class AliPay extends Payment
         $params = array_merge($this->config, [
             'method' => $this->method,
             'timestamp' => date('Y-m-d H:i:s'),
-            'bizcontent' => Json::encode($params)
+            'bizcontent' => Json::encode($params),
         ]);
-        var_dump($params);exit;
         $data = Parameter::generateSignByAlipay($params);
         $sign = Encryptor::sign($data, $this->config['private_key']);
         $params['sign'] = $sign;
         unset($params['private_key']);
         $this->payload = [
-            'form_params' => $params,
             'decode_content' => 'gzip', // 设置响应解码方式为 gzip，提高响应速度
             'headers' => [
                 'Accept-Encoding' => 'gzip', // 告诉服务器可以返回 gzip 压缩的响应
             ],
         ];
+        $this->uri = http_build_query($params);
+        echo '<pre>';
+        var_dump($this->payload, $this->uri);
+        echo '<pre>';
+        exit;
     }
 
     public function beforeResponse($response)
@@ -63,7 +66,7 @@ class AliPay extends Payment
      * @throws \Exception
      * @throws GuzzleException
      */
-    public function createOrder($params)
+    public function createOrder($params): string
     {
         $this->payload = $params;
         $this->uri = $this->api_url;
