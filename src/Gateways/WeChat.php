@@ -4,11 +4,10 @@ namespace Pay\Gateways;
 
 use GuzzleHttp\Exception\GuzzleException;
 use Pay\Contracts\AbstractPayment;
-use Pay\Exceptions\WechatException;
 use Pay\Gateways\models\WechatModel;
 use Pay\Processor\Parameter;
+use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
-use yii\web\BadRequestHttpException;
 
 /**
  * WeChat AbstractPayment
@@ -19,14 +18,16 @@ use yii\web\BadRequestHttpException;
 class WeChat extends AbstractPayment
 {
     const API_URL = 'https://api.mch.weixin.qq.com';
+
     public function __construct($config)
     {
+        var_dump($config);exit;
         parent::__construct($config);
-        $this->api_url = self::API_URL;
+        $this->uri = self::API_URL;
         WechatModel::validateConfig($config);
     }
 
-    public function beforeRequest()
+    protected function beforeRequest()
     {
         $params = array_merge($this->config, $this->payload);
         $params = Parameter::generateSignByWechat($params);
@@ -37,16 +38,15 @@ class WeChat extends AbstractPayment
 
     /**
      * @param $response
-     * @return mixed|InvalidConfigException
-     * @throws BadRequestHttpException
+     * @return InvalidConfigException
      * @author yt <yuantong@srun.com>
      */
-    public function beforeResponse($response)
+    protected function beforeResponse($response)
     {
         $response = parent::beforeResponse($response);
         $result = Parameter::xmlToArray($response);
         if ($result['return_code'] != 'SUCCESS') {
-            throw new BadRequestHttpException($result['return_msg']);
+            throw new InvalidCallException($result['return_msg']);
         }
         return $this->parseResponse($result);
     }
@@ -54,25 +54,39 @@ class WeChat extends AbstractPayment
     /**
      * @throws GuzzleException
      */
-    public function pay($params)
+    public function web($params): string
     {
-        $this->uri = sprintf('%s/pay/%s', $this->api_url, 'unifiedorder');
-        $this->payload = $params;
+        $this->uri = sprintf('%s/pay/%s', $this->uri, 'unifiedorder');
+        $this->payload = array_merge($params, ['trade_type' => 'NATIVE', 'spbill_create_ip' => \Yii::$app->request->userIP]);
         return $this->post();
     }
-
 
     /**
      * @throws GuzzleException
      */
-    public function query($out_trade_no)
+    public function wap($params): string
     {
-        $this->uri = sprintf('%s/pay/%s', $this->api_url, 'orderquery');
+        $this->uri = sprintf('%s/pay/%s', $this->uri, 'unifiedorder');
+        $this->payload = array_merge($params, ['trade_type' => 'MWEB', 'spbill_create_ip' => \Yii::$app->request->userIP]);
+        return $this->post();
+    }
+
+    /**
+     * @throws GuzzleException
+     */
+    public function query($out_trade_no): string
+    {
+        $this->uri = sprintf('%s/pay/%s', $this->uri, 'orderquery');
         $this->payload = compact('out_trade_no');
         return $this->post();
     }
 
-    public function parseResponse($result)
+    /**
+     * 格式化响应
+     * @param $result
+     * @return InvalidConfigException
+     */
+    public function parseResponse($result): InvalidConfigException
     {
         if ($result['trade_type'] == 'NATIVE') {
             // 扫码

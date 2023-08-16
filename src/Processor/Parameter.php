@@ -26,7 +26,7 @@ class Parameter
         ksort($params);
 
         $query = sprintf('%s&key=%s', self::arrayToString($params), $key);
-        $params['generateSign'] = strtoupper(md5($query));
+        $params['sign'] = strtoupper(md5($query));
         return $params;
     }
 

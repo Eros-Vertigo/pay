@@ -8,7 +8,7 @@ use yii\base\Component;
 
 /**
  * @property AliPay $alipay
- * @property WeChat $weChat
+ * @property WeChat $wechat
  */
 class Payment extends Component
 {
@@ -21,19 +21,14 @@ class Payment extends Component
      */
     private AliPay $_alipay;
 
-    public function __construct($config = [])
-    {
-        parent::__construct($config);
-    }
-
     public function getWechat(): WeChat
     {
         return $this->_wechat;
     }
 
-    public function setWechat($config)
+    public function setWechat($wechat)
     {
-        $this->_wechat = new WeChat($config);
+        $this->_wechat = new WeChat($wechat);
     }
 
     public function getAlipay(): AliPay
@@ -41,9 +36,9 @@ class Payment extends Component
         return $this->_alipay;
     }
 
-    public function setAlipay($config)
+    public function setAlipay($alipay)
     {
-        $this->_alipay = new AliPay(array_merge($config, [
+        $this->_alipay = new AliPay(array_merge($alipay, [
             'sign_type' => 'RSA2',
             'charset' => 'utf-8',
             'version' => '1.0',

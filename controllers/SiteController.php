@@ -9,14 +9,15 @@
 namespace app\controllers;
 
 use GuzzleHttp\Exception\GuzzleException;
+use Pay\Processor\Qrcoder;
 use Yii;
+use yii\helpers\Json;
 use yii\web\Controller;
 
 class SiteController extends Controller
 {
     /**
      * Site Index
-     * @throws GuzzleException
      */
     public function actionIndex()
     {
@@ -37,25 +38,20 @@ class SiteController extends Controller
         }
     }
 
-    /**
-     * @return string
-     * @throws GuzzleException
-     * @author yt <yuantong@srun.com>
-     */
     public function actionWechat()
     {
-//        try {
-//            $payment = PaymentFactory::createPayment('wechat');
-//            $result = $payment->pay([
-//                'out_trade_no' => '20150320010101001',
-//                'total_fee' => 1,
-//                'trade_type' => 'MWEB',
-//            ]);
-//            $this->layout = false;
-//            return Json::decode($result);
-//        } catch (WechatException $e) {
-//            return $e->getMessage();
-//        }
+        $params = [
+            'out_trade_no' => '20150320010101001',
+            'total_fee' => 1,
+        ];
+        $payment = Yii::$app->payment;
+        try {
+            $result = $payment->wechat->web($params);
+            $this->layout = false;
+            return Json::decode($result);
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -77,9 +73,9 @@ class SiteController extends Controller
 //            "trade_type" => "NATIVE",
 //            "code_url" => "weixin://wxpay/bizpayurl?pr=8gHnhUGzz",
 //        ];
-//        $payment = PaymentFactory::createPayment('wechat');
-//        $result = $payment->parseResponse($json);
-//        $qrcode = Qrcoder::write($result['data']);
+//        $payment = Yii::$app->payment;
+//        $result = $payment->wechat->parseResponse($json);
+//        $qrcode = Qrcoder::write($result);
 //        return $this->render('wechat', [
 //            'qrcode' => $qrcode
 //        ]);
