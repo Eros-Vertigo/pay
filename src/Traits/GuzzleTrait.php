@@ -27,7 +27,7 @@ trait GuzzleTrait
      * 请求前置操作
      * @author yt <yuantong@srun.com>
      */
-    public function beforeRequest()
+    protected function beforeRequest()
     {
         if (empty($this->uri)) {
             throw new InvalidArgumentException("Request URL must be have");
@@ -40,7 +40,7 @@ trait GuzzleTrait
      * @return mixed
      * @author yt <yuantong@srun.com>
      */
-    public function beforeResponse($response)
+    protected function beforeResponse($response)
     {
         return $response->getBody()->getContents();
     }
@@ -52,7 +52,7 @@ trait GuzzleTrait
      * @throws GuzzleException
      * @throws Exception
      */
-    public function post(): string
+    protected function post(): string
     {
         $this->beforeRequest();
         $response = $this->client->post($this->uri, $this->payload);
@@ -63,10 +63,22 @@ trait GuzzleTrait
     /**
      * @throws GuzzleException
      */
-    public function get($uri, $query): string
+    protected function get(): string
     {
-        $response = $this->client->get($uri, $query);
+        $this->beforeRequest();
+        $response = $this->client->get($this->uri.'?'.http_build_query($this->payload));
 
-        return $response->getBody()->getContents();
+        return $this->beforeResponse($response);
+    }
+
+    /**
+     * Build pay url
+     * @return string
+     * @author yt <yuantong@srun.com>
+     */
+    protected function buildUrl(): string
+    {
+        $this->beforeRequest();
+        return $this->uri.'?'.http_build_query($this->payload);
     }
 }

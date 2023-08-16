@@ -9,7 +9,7 @@ namespace Pay\Contracts;
  */
 interface PaymentInterface
 {
-    public function createOrder($params);
+    public function pay($params);
 
     public function query($out_trade_no);
 }

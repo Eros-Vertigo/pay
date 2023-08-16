@@ -21,7 +21,8 @@
         "ext-libxml": "*",
         "ext-openssl": "*",
         "ext-iconv": "*",
-        "endroid/qr-code": "4.4.4"
+        "endroid/qr-code": "4.4.4",
+        "ext-mbstring": "*"
     },
     "autoload" : {
         "psr-4": {

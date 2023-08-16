@@ -3,7 +3,7 @@
 namespace Pay\Gateways;
 
 use GuzzleHttp\Exception\GuzzleException;
-use Pay\Contracts\Payment;
+use Pay\Contracts\AbstractPayment;
 use Pay\Exceptions\WechatException;
 use Pay\Gateways\models\WechatModel;
 use Pay\Processor\Parameter;
@@ -11,12 +11,12 @@ use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 
 /**
- * WeChat Payment
+ * WeChat AbstractPayment
  * User: yuantong
  * Date: 2023/3/21
  * Email: <yuantong@srun.com>
  */
-class WeChat extends Payment
+class WeChat extends AbstractPayment
 {
     const API_URL = 'https://api.mch.weixin.qq.com';
     public function __construct($config)
@@ -54,7 +54,7 @@ class WeChat extends Payment
     /**
      * @throws GuzzleException
      */
-    public function createOrder($params)
+    public function pay($params)
     {
         $this->uri = sprintf('%s/pay/%s', $this->api_url, 'unifiedorder');
         $this->payload = $params;

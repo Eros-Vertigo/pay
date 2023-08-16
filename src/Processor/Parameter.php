@@ -26,15 +26,13 @@ class Parameter
         ksort($params);
 
         $query = sprintf('%s&key=%s', self::arrayToString($params), $key);
-        $params['sign'] = strtoupper(md5($query));
+        $params['generateSign'] = strtoupper(md5($query));
         return $params;
     }
 
     public static function generateSignByAlipay($params): string
     {
         unset($params['private_key']);
-        ksort($params);
-
         return self::arrayToString($params);
     }
 
@@ -46,6 +44,7 @@ class Parameter
     public static function arrayToString($params): string
     {
         $query = '';
+        ksort($params);
         foreach ($params as $k => $v) {
             $query .= $k . '=' . $v . '&';
         }

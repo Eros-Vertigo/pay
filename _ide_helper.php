@@ -1,6 +1,7 @@
 <?php
 
 use Mero\Monolog\MonologComponent;
+use Pay\Components\Payment;
 use Pay\Factories\PaymentFactory;
 
 /**
@@ -20,7 +21,7 @@ class Yii
 /**
  * @property
  * @property MonologComponent $monolog
- * @property PaymentFactory $payment
+ * @property Payment $payment
  */
 class Application extends \yii\web\Application
 {

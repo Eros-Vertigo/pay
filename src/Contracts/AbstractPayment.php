@@ -11,7 +11,7 @@ use Pay\Traits\GuzzleTrait;
  * Date: 2023/3/27
  * Email: <yuantong@srun.com>
  */
-abstract class Payment implements PaymentInterface
+abstract class AbstractPayment implements PaymentInterface
 {
     use GuzzleTrait;
 
@@ -20,10 +20,6 @@ abstract class Payment implements PaymentInterface
      */
     protected $config;
 
-    /**
-     * @var mixed 接口地址
-     */
-    protected $api_url;
     /**
      * @var Client GuzzleClient
      */
